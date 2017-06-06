@@ -1,0 +1,81 @@
+grammar Pascal;
+
+
+options
+{
+    language = Java;
+}
+
+
+module: constants? var? 'BEGIN' ENDOFLINE statement* 'END.';
+
+
+constants: 'CONST' ENDOFLINE NAME ' = ' INT ';' ENDOFLINE;
+
+
+var: 'VAR' ENDOFLINE (variable)+;
+
+
+variable: NAME ': ' type ';' ENDOFLINE;
+
+
+type: 'INTEGER' |
+      'ARRAY [0..' NAME '] OF INTEGER';
+
+
+INT: [0-9]+;
+
+
+NAME: [a-z]+;
+
+
+ENDOFLINE: '\r'? '\n';
+
+
+statement: if_statement |
+           if_else_statement |
+           while_statement |
+           for_statement |
+           appropriation_statement |
+           write_statement;
+
+
+if_statement: 'IF (' condition ') THEN' ENDOFLINE 'BEGIN' ENDOFLINE statement+ 'END;' ENDOFLINE;
+
+
+if_else_statement: 'IF (' condition ') THEN' ENDOFLINE 'BEGIN' ENDOFLINE statement+ 'END' ENDOFLINE 'ELSE' ENDOFLINE 'BEGIN' ENDOFLINE statement+ 'END;' ENDOFLINE;
+
+
+while_statement: 'WHILE (' condition ') DO' ENDOFLINE 'BEGIN' ENDOFLINE statement+ 'END;' ENDOFLINE;
+
+
+for_statement: 'FOR VAR ' appropriation_statement ' TO ' expression ' DO' ENDOFLINE 'BEGIN' ENDOFLINE statement+ 'END;' ENDOFLINE;
+
+
+appropriation_statement: NAME ' := ' expression ';' ENDOFLINE |
+                         NAME ' := ' expression |
+                         take ' := ' expression ';' ENDOFLINE;
+
+
+write_statement: 'WRITELN(' expression ');' ENDOFLINE;
+
+
+expression: INT |
+            NAME |
+            sum;
+
+
+sum: NAME ' + ' INT |
+     NAME ' - ' INT;
+
+
+take: NAME '[' NAME ']' |
+      NAME '[' INT ']';
+
+
+condition: NAME ' <> ' NAME |
+           NAME ' = ' INT |
+           mod ' = ' INT;
+
+
+mod: NAME ' MOD ' take;

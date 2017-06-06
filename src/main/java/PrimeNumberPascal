@@ -1,0 +1,41 @@
+CONST
+n = 10000;
+VAR
+count: INTEGER;
+k: INTEGER;
+divisors: INTEGER;
+lst: ARRAY [0..n] OF INTEGER;
+BEGIN
+count := 1;
+k := 3;
+divisors := 0;
+lst[0] := 2;
+IF (n = 1) THEN
+BEGIN
+WRITELN(2);
+END
+ELSE
+BEGIN
+WHILE (count <> n) DO
+BEGIN
+FOR VAR i := 0 TO count - 1 DO
+BEGIN
+IF (k MOD lst[i] = 0) THEN
+BEGIN
+divisors := divisors + 1;
+END;
+END;
+IF (divisors = 0) THEN
+BEGIN
+lst[count] := k;
+count := count + 1;
+END
+ELSE
+BEGIN
+divisors := 0;
+END;
+k := k + 2;
+END;
+WRITELN(k - 2);
+END;
+END.
